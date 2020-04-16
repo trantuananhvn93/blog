@@ -17,10 +17,12 @@ from django.contrib import admin
 from django.urls import path
 
 from django.conf.urls import url
-from blog.views import chatbot, chatbotReply
+from blog.views import chatbot, chatbotReply, ner, nerReply
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url('^$', chatbot, name='chatbot'),
+    url('^chatbot$', chatbot, name='chatbot'), #'^$'
     url('chatbotReply', chatbotReply, name='chatbotReply'),
+    url('^ner$', ner, name='ner'),
+    url('nerReply', nerReply, name='nerReply'),
 ]

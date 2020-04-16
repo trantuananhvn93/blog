@@ -3,6 +3,7 @@ from django.http import HttpResponse
 
 from .chatbot.functions import *
 import pickle
+from .ner.lib import *
 
 save_dir = "../data/chatbot/"
 searcher = pickle.load( open( os.path.join(save_dir, "searcher.pck"), "rb" ) )
@@ -10,7 +11,7 @@ searcher = pickle.load( open( os.path.join(save_dir, "searcher.pck"), "rb" ) )
 voc = pickle.load( open( os.path.join(save_dir, "voc.pck"), "rb" ) )
 
 def chatbot(request):
-    return render(request, 'chatbot.html')
+    return render(request, 'chatbot/index.html')
 
 def chatbotReply(request):
     if request.method == 'POST':
@@ -26,4 +27,15 @@ def chatbotReply(request):
         else: 
             response = "'" + output_words + "'" + " is not found in our dictionary. Please try again!"
         context = {'query': text, 'response': response}
-        return render(request, 'chatbot.html', context)
+        return render(request, 'chatbot/index.html', context)
+
+def ner(request):
+    return render(request, 'ner/index.html')
+
+def nerReply(request):
+    if request.method == 'POST':
+        text  = request.POST.get('nertext')
+        doc = nlp(str(text))
+        response = displacy.render(doc, jupyter=False, style='ent')
+        context = {'response': response}
+        return render(request, 'ner/index.html', context)
