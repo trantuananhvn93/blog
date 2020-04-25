@@ -14,15 +14,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from django.conf.urls import url
-from blog.views import chatbot, chatbotReply, ner, nerReply
+from blog.views import chatbot, chatbotReply, ner, nerReply, HomeView, TutorialDetailView
+
+from . import settings
+from django.contrib.staticfiles.urls import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+app_name = 'blog'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url('^chatbot$', chatbot, name='chatbot'), #'^$'
-    url('chatbotReply', chatbotReply, name='chatbotReply'),
-    url('^ner$', ner, name='ner'),
-    url('nerReply', nerReply, name='nerReply'),
+    path('chatbot', chatbot, name='chatbot'),
+    path('chatbotReply', chatbotReply, name='chatbotReply'),
+    path('ner', ner, name='ner'),
+    path('nerReply', nerReply, name='nerReply'),
+    # path('home', homepage, name='homePage'),
+    path('', HomeView.as_view(), name='home'),
+    path('tutorial-<int:pk>/', TutorialDetailView.as_view(), name='tutorial'),
 ]
+
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,20 +1,25 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.generic import ListView, DetailView, View
 
 from .chatbot.functions import *
 import pickle
 from .ner.lib import *
 
-save_dir = "../data/chatbot/"
-searcher = pickle.load( open( os.path.join(save_dir, "searcher.pck"), "rb" ) )
-# searcher = GreedySearchDecoder(encoder, decoder)
-voc = pickle.load( open( os.path.join(save_dir, "voc.pck"), "rb" ) )
+from .models import Tutorial
+
+
 
 def chatbot(request):
     return render(request, 'chatbot/index.html')
 
 def chatbotReply(request):
     if request.method == 'POST':
+        save_dir = "../data/chatbot/"
+        searcher = pickle.load( open( os.path.join(save_dir, "searcher.pck"), "rb" ) )
+        # searcher = GreedySearchDecoder(encoder, decoder)
+        voc = pickle.load( open( os.path.join(save_dir, "voc.pck"), "rb" ) )
+
         text  = request.POST.get('chattext')
         # Normalize sentence
         input_sentence = normalizeString(text)
@@ -39,3 +44,18 @@ def nerReply(request):
         response = displacy.render(doc, jupyter=False, style='ent')
         context = {'response': response}
         return render(request, 'ner/index.html', context)
+
+
+def homepage(request):
+    return render(request = request,
+                  template_name='posts/index.html',
+                  context = {"tutorials":Tutorial.objects.all})
+
+class HomeView(ListView):
+    model = Tutorial
+    # paginate_by = 9
+    template_name = "posts/index.html"
+
+class TutorialDetailView(DetailView):
+    model = Tutorial
+    template_name = "posts/detail.html"

@@ -5,28 +5,29 @@
 {% block content %}
 
 <div class="container">
-<h1>Chat bot</h1>
-<form  method="post" action="chatbotReply">
-  {% csrf_token %}
-<div class="form-group">
-  <label for="comment">Enter text:</label>
-  <textarea class="form-control" rows="3" id="chattext" type="text" name="chattext" placeholder="Write something here..."></textarea>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <h1>Chat bot</h1>
+  <form method="post" action="chatbotReply">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="comment">Enter text:</label>
+      <textarea class="form-control" rows="3" id="chattext" type="text" name="chattext"
+        placeholder="Write something here..."></textarea>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+
+  <div class="form-group">
+    <label for="query">Human:</label>
+    <textarea class="form-control" id="query" rows="3" disabled>{{query}}</textarea>
+    <label for="response">Bot:</label>
+    <textarea class="form-control" id="response" rows="3" disabled>{{response}}</textarea>
+  </div>
+
 </div>
-</form>
-
-<div class="form-group">
-  <label for="query">Human:</label>
-  <textarea class="form-control" id="query" rows="3" disabled>{{query}}</textarea>
-  <label for="response">Bot:</label>
-  <textarea class="form-control" id="response" rows="3" disabled>{{response}}</textarea>
-</div>
-
-</div>  
 
 
 
 
 
-  
+
 {% endblock content %}

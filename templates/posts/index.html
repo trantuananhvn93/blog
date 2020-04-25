@@ -1,0 +1,36 @@
+{% extends "base_home.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        {% for tut in object_list %}
+        <div class="col-sm-3 d-flex align-items-stretch">
+            <div class="card mt-1 mb-1">
+                <a href="{% url 'tutorial' tut.id %}">
+                    <img class="card-img-top" src="{{tut.img.url}}" alt="Card image cap">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{% url 'tutorial' tut.id %}">
+                            {{tut.title}}
+                        </a>
+                    </h5>
+                    <p class="card-text">{{tut.quote}}</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">updated at {{tut.published}} by {{tut.author}} </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+
+</div>
+
+
+
+{% endblock content %}

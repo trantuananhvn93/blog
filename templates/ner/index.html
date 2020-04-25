@@ -5,42 +5,47 @@
 {% block content %}
 
 <div class="container">
-<h1>Named Entity Recognition</h1>
+  <h1>Named Entity Recognition</h1>
 
-<label for="nertext">Enter text or choose an example:</label>
-<div class="input-group mb-3">
-<div class="input-group-prepend">
-  <label class="input-group-text" for="example">Examples:</label>
+  <label for="nertext">Enter text or choose an example:</label>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <label class="input-group-text" for="example">Examples:</label>
+    </div>
+    <select class="custom-select" id="example" onchange="renderText()">
+      <option selected>Choose...</option>
+      <option value="Donald John Trump (born June 14, 1946) is the 45th and current president of the United States">
+        Donald John Trump ...</option>
+      <option
+        value="The 2019–20 coronavirus pandemic first manifested as a cluster of mysterious, suspected pneumonia cases in Wuhan, the capital of Hubei province, China">
+        The 2019–20 coronavirus pandemic ...</option>
+      <option
+        value="The term Deep Learning was introduced to the machine learning community by Rina Dechter in 1986, and to artificial neural networks by Igor Aizenberg and colleagues in 2000, in the context of Boolean threshold neurons.">
+        The term Deep Learning was ...</option>
+    </select>
+  </div>
+
+  <form method="post" action="nerReply">
+    {% csrf_token %}
+    <div class="form-group">
+      <textarea class="form-control" rows="3" id="nertext" type="text" name="nertext"></textarea>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+
+  {{response  | safe}}
+
 </div>
-<select class="custom-select" id="example" onchange="renderText()">
-  <option selected>Choose...</option>
-  <option value="Donald John Trump (born June 14, 1946) is the 45th and current president of the United States">Donald John Trump ...</option>
-  <option value="The 2019–20 coronavirus pandemic first manifested as a cluster of mysterious, suspected pneumonia cases in Wuhan, the capital of Hubei province, China">The 2019–20 coronavirus pandemic ...</option>
-  <option value="The term Deep Learning was introduced to the machine learning community by Rina Dechter in 1986, and to artificial neural networks by Igor Aizenberg and colleagues in 2000, in the context of Boolean threshold neurons.">The term Deep Learning was ...</option>
-</select>
-</div>
-
-<form  method="post" action="nerReply">
-  {% csrf_token %}
-<div class="form-group">
-<textarea class="form-control" rows="3" id="nertext" type="text" name="nertext"></textarea>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</div>
-</form>
-
-{{response  | safe}}
-
-</div>  
 
 <script type="text/javascript">
-function renderText(){
-  var select = document.getElementById('example');
-  var x = select.options[select.selectedIndex].value;
-  document.getElementById('nertext').innerHTML = x;
-}
+  function renderText() {
+    var select = document.getElementById('example');
+    var x = select.options[select.selectedIndex].value;
+    document.getElementById('nertext').innerHTML = x;
+  }
 </script>
 
 
 
-  
+
 {% endblock content %}
