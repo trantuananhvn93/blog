@@ -1,21 +1,26 @@
 from django.contrib import admin
-from .models import Tutorial
-from django.db import models
-from pagedown.widgets import AdminPagedownWidget
-
-# class TutorialAdmin(admin.ModelAdmin):
-
-#     fieldsets = [
-#         ("Title/date", {'fields': ["tutorial_title", "tutorial_published"]}),
-#         ("Content", {"fields": ["tutorial_content"]})
-#     ]
-
-#     formfield_overrides = {
-#         models.TextField: {'widget': AdminPagedownWidget},
-#         }
+from .models import Post, Comment
 
 
-admin.site.register(Tutorial) #,TutorialAdmin)
+# class PostAdmin(admin.ModelAdmin):
+#     list_display  = ('title', 'published', 'allow_comments')
+#     list_filter   = ('published',)
+#     search_fields = ('title', 'content')
+#     fieldsets = ((None, 
+#                   {'fields': ('title',  'content', 
+#                               'allow_comments', 'published',)}),)
 
+# admin.site.register(Post, PostAdmin)
 
+admin.site.register(Post) 
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'body', 'post', 'created_on', 'active')
+    list_filter = ('active', 'created_on')
+    search_fields = ('name', 'body')
+    actions = ['approve_comments']
+
+    def approve_comments(self, request, queryset):
+        queryset.update(active=True)
 

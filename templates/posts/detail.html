@@ -1,11 +1,57 @@
 {% extends "base_home.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container">
-    <p>{{object.title}}</p>
-    <p>{{object.published}}</p>
-    <p>{{object.toMarkDown}}</p>
+<div class="container bg-light">
+    <h1>{{post.title}}</h1>
+    <p>{{post.published}} by {{post.author}}</p>
+    <hr>
+    <p>{{post.toMarkDown}}</p>
     <br><br>
+    <hr>
 </div>
+
+<div class="container">
+    <!-- comments -->
+    <h2>{{ comments.count }} comments</h2>
+
+    {% for comment in comments %}
+    <blockquote>
+        <div class="comments" style="padding: 10px;">
+            <p class="font-weight-bold">
+                {{ comment.name }}
+                <span class=" text-muted font-weight-normal">
+                    | {{ comment.created_on }}
+                </span>
+            </p>
+            {{ comment.body | linebreaks }}
+        </div>
+    </blockquote>
+    {% endfor %}
+
+
+    <!-- Comments Form -->
+    <div class="card my-4">
+        <h5 class="card-header">Leave a Comment:</h5>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                {{ comment_form|crispy }}
+                <button class="btn btn-primary pull-right" type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+ 
+
+
+
+
+
+
+
+
 
 {% endblock content %}

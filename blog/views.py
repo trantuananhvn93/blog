@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views.generic import ListView, DetailView, View
 
@@ -6,9 +6,12 @@ from .chatbot.functions import *
 import pickle
 from .ner.lib import *
 
-from .models import Tutorial
+from .models import Post
 
+from django.urls import reverse
+from django.views.generic import DateDetailView
 
+from .forms import CommentForm
 
 def chatbot(request):
     return render(request, 'chatbot/index.html')
@@ -49,13 +52,41 @@ def nerReply(request):
 def homepage(request):
     return render(request = request,
                   template_name='posts/index.html',
-                  context = {"tutorials":Tutorial.objects.all})
+                  context = {"tutorials":Post.objects.all})
 
 class HomeView(ListView):
-    model = Tutorial
+    model = Post
     # paginate_by = 9
     template_name = "posts/index.html"
 
-class TutorialDetailView(DetailView):
-    model = Tutorial
-    template_name = "posts/detail.html"
+# class PostDetailView(DetailView):
+#     model = Post
+#     template_name = "posts/detail.html"
+
+
+
+def post_detail(request, post_id):
+    template_name = 'posts/detail.html'
+    post = get_object_or_404(Post, pk=post_id)
+    comments = post.comments.filter(active=True)
+    new_comment = None
+    # Comment posted
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+
+            # Create Comment object but don't save to database yet
+            new_comment = comment_form.save(commit=False)
+            # Assign the current post to the comment
+            new_comment.post = post
+            # Save the comment to the database
+            new_comment.save()
+            # reset comment form
+            comment_form = CommentForm()
+    else:
+        comment_form = CommentForm()
+
+    return render(request, template_name, {'post': post,
+                                           'comments': comments,
+                                           'new_comment': new_comment,
+                                           'comment_form': comment_form})
