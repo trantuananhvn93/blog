@@ -6,3 +6,21 @@
 - python manage.py migrate
 - python manage.py loaddata db.json
 - python manage.py runserver
+
+
+
+## Screenshot
+
+HomePage:
+
+![blog](img/blog.png)
+
+Article Page:
+
+![tutorial](img/tutorial.png)
+
+Demo Pages:
+
+![ner](img/ner.png)
+
+![chatbot](img/chatbot.png)
