@@ -21,6 +21,6 @@ Article Page:
 
 Demo Pages:
 
-![ner](img/ner.png)
+![ner](img/NER.png)
 
-![chatbot](img/chatbot.png)
+![chatbot](img/chatbot.PNG)
